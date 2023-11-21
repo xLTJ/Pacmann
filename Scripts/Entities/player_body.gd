@@ -60,43 +60,33 @@ func move_player(delta):
 func update_direction():
 	match movement_direction:
 		'down':
-			var bottom_tile = ObstacleTileMap.get_neighbor_cell(grid_coordinates, TileSet.CELL_NEIGHBOR_BOTTOM_SIDE)
-			if (ObstacleTileMap.get_cell_source_id(0, bottom_tile)) == -1:
-				movement_vector = Vector2.ZERO
-				movement_vector.y = 1
-				player_sprite.flip_h = movement_vector.x < 0
-				player_sprite.rotation_degrees = 90
+			update_movement(Vector2(0, 1), 90, 4)
 		'up':
-			var top_tile = ObstacleTileMap.get_neighbor_cell(grid_coordinates, TileSet.CELL_NEIGHBOR_TOP_SIDE)
-			if (ObstacleTileMap.get_cell_source_id(0, top_tile)) == -1:
-				movement_vector = Vector2.ZERO
-				movement_vector.y = -1
-				player_sprite.flip_h = movement_vector.x < 0
-				player_sprite.rotation_degrees = 270
+			update_movement(Vector2(0, -1), 270, 12)
 		'right':
-			var right_tile = ObstacleTileMap.get_neighbor_cell(grid_coordinates, TileSet.CELL_NEIGHBOR_RIGHT_SIDE)
-			if (ObstacleTileMap.get_cell_source_id(0, right_tile)) == -1:
-				player_sprite.rotation_degrees = 0
-				movement_vector = Vector2.ZERO
-				movement_vector.x = 1
-				player_sprite.flip_h = movement_vector.x < 0
+			update_movement(Vector2(1, 0), 0, 0)
 		'left':
-			var left_tile = ObstacleTileMap.get_neighbor_cell(grid_coordinates, TileSet.CELL_NEIGHBOR_LEFT_SIDE)
-			if (ObstacleTileMap.get_cell_source_id(0, left_tile)) == -1:
-				player_sprite.rotation_degrees = 0
-				movement_vector = Vector2.ZERO
-				movement_vector.x = -1
-				player_sprite.flip_h = movement_vector.x < 0
+			update_movement(Vector2(-1, 0), 0, 8)
+			
+	
+	collision()
+	start_position = position
+	is_moving = true
+	
 	
 	collision()
 	start_position = position
 	is_moving = true
 
 
-func sprite_direction():
-	player_sprite.flip_h = movement_vector.x < 0
-	if movement_vector.y == 1:
-		player_sprite.rotation_degrees = 90
+func update_movement(new_vector, rotation, direction_id):
+	var neighbor_cell = ObstacleTileMap.get_neighbor_cell(grid_coordinates, direction_id)
+	
+	if ObstacleTileMap.get_cell_source_id(0, neighbor_cell) == -1:
+		movement_vector = new_vector
+		player_sprite.flip_h = movement_vector.x < 0
+		player_sprite.rotation_degrees = rotation
+
 
 func get_coordinates():
 	var player_coordinates = (position / tile_size)
@@ -105,20 +95,14 @@ func get_coordinates():
 	return player_coordinates
 
 func collision():
-	if movement_vector.y == -1:
-		var top_tile = ObstacleTileMap.get_neighbor_cell(grid_coordinates, TileSet.CELL_NEIGHBOR_TOP_SIDE)
-		if (ObstacleTileMap.get_cell_source_id(0, top_tile)) == 1:
-			movement_vector.y = 0
-	if movement_vector.y == 1:
-		var bottom_side = ObstacleTileMap.get_neighbor_cell(grid_coordinates, TileSet.CELL_NEIGHBOR_BOTTOM_SIDE)
-		if (ObstacleTileMap.get_cell_source_id(0, bottom_side)) == 1:
-			movement_vector.y = 0
+	check_collision(Vector2(0, -1), TileSet.CELL_NEIGHBOR_TOP_SIDE)
+	check_collision(Vector2(0, 1), TileSet.CELL_NEIGHBOR_BOTTOM_SIDE)
+	check_collision(Vector2(-1, 0), TileSet.CELL_NEIGHBOR_LEFT_SIDE)
+	check_collision(Vector2(1, 0), TileSet.CELL_NEIGHBOR_RIGHT_SIDE)
 
-	if movement_vector.x == -1:
-		var left_tile = ObstacleTileMap.get_neighbor_cell(grid_coordinates, TileSet.CELL_NEIGHBOR_LEFT_SIDE)
-		if (ObstacleTileMap.get_cell_source_id(0, left_tile)) == 1:
-			movement_vector.x = 0
-	if movement_vector.x == 1:
-		var right_tile = ObstacleTileMap.get_neighbor_cell(grid_coordinates, TileSet.CELL_NEIGHBOR_RIGHT_SIDE)
-		if (ObstacleTileMap.get_cell_source_id(0, right_tile)) == 1:
-			movement_vector.x = 0
+
+func check_collision(direction, neighbor_type):
+	if movement_vector == direction:
+		var neighbor_cell = ObstacleTileMap.get_neighbor_cell(grid_coordinates, neighbor_type)
+		if ObstacleTileMap.get_cell_source_id(0, neighbor_cell) == 1:
+			movement_vector = Vector2.ZERO
