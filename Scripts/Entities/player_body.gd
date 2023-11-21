@@ -1,10 +1,9 @@
 extends CharacterBody2D
 
 @export var ObstacleTileMap: TileMap
-
 @onready var player_sprite = $AnimatedSprite2D
-
 @export var speed = 5
+
 const tile_size = 32
 
 var is_moving = false
@@ -19,7 +18,9 @@ func _ready():
 	start_position = position
 	grid_coordinates = get_coordinates()
 	player_sprite.play()
-	# print(ObstacleTileMap.get_cell_source_id(0, Vector2i(0,0)))
+	if 1 != 2:
+		print('yes')
+		
 
 
 func _physics_process(delta):
@@ -27,27 +28,22 @@ func _physics_process(delta):
 	player_input()
 	if !is_moving:
 		update_direction()
-	if movement_vector  != Vector2.ZERO:
-		move_player(delta)
-	else:
-		is_moving = false
+	move_player(delta)
 
 
+# handles player input
 func player_input():
 	if Input.is_action_just_pressed("ui_down"):
-		print('down')
 		movement_direction = 'down'
 	elif Input.is_action_just_pressed("ui_up"):
-		print('up')
 		movement_direction = 'up'
 	elif Input.is_action_just_pressed("ui_left"):
-		print('left')
 		movement_direction = 'left'
 	elif Input.is_action_just_pressed("ui_right"):
-		print('right')
 		movement_direction = 'right'
 
 
+# Moves the player
 func move_player(delta):
 	movement_progress += speed * delta
 	if movement_progress >= 1.0:
@@ -57,6 +53,8 @@ func move_player(delta):
 	else:
 		position = start_position + (movement_progress * movement_vector * tile_size)
 
+
+# Updates the players direction based on the players input, and makes sure that the direction first actually changes when the tile is available
 func update_direction():
 	match movement_direction:
 		'down':
@@ -72,13 +70,9 @@ func update_direction():
 	collision()
 	start_position = position
 	is_moving = true
-	
-	
-	collision()
-	start_position = position
-	is_moving = true
 
 
+# Updates the player movement based on the direction
 func update_movement(new_vector, rotation, direction_id):
 	var neighbor_cell = ObstacleTileMap.get_neighbor_cell(grid_coordinates, direction_id)
 	
@@ -88,12 +82,15 @@ func update_movement(new_vector, rotation, direction_id):
 		player_sprite.rotation_degrees = rotation
 
 
+# Gets the grid coordinates of the player
 func get_coordinates():
 	var player_coordinates = (position / tile_size)
 	player_coordinates.x -= 0.5
 	player_coordinates.y -= 0.5
 	return player_coordinates
 
+
+# Handles collision checks
 func collision():
 	check_collision(Vector2(0, -1), TileSet.CELL_NEIGHBOR_TOP_SIDE)
 	check_collision(Vector2(0, 1), TileSet.CELL_NEIGHBOR_BOTTOM_SIDE)
@@ -101,6 +98,7 @@ func collision():
 	check_collision(Vector2(1, 0), TileSet.CELL_NEIGHBOR_RIGHT_SIDE)
 
 
+# Checks the collision in a specific direction
 func check_collision(direction, neighbor_type):
 	if movement_vector == direction:
 		var neighbor_cell = ObstacleTileMap.get_neighbor_cell(grid_coordinates, neighbor_type)

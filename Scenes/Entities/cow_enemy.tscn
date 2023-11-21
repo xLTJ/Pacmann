@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://dcj4jmguuiphx"]
+
+[ext_resource type="Script" path="res://Scripts/Entities/cow_enemy.gd" id="1_a0u7x"]
+[ext_resource type="Texture2D" uid="uid://bju2x4vtmj205" path="res://Assets/Sprites/Cow(real).png" id="1_lbav2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mimoe"]
+size = Vector2(16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xghqs"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_lbav2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="CowBody" type="CharacterBody2D"]
+script = ExtResource("1_a0u7x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_mimoe")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_xghqs")
