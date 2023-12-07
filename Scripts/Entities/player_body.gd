@@ -66,7 +66,6 @@ func update_direction():
 		'left':
 			update_movement(Vector2(-1, 0), 0, 8)
 			
-	
 	collision()
 	start_position = position
 	is_moving = true

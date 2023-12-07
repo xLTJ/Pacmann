@@ -3,9 +3,6 @@
 [ext_resource type="Script" path="res://Scripts/Entities/player_body.gd" id="1_1q06c"]
 [ext_resource type="Texture2D" uid="uid://b5vk2y4i7j515" path="res://Assets/Sprites/Pacman from wish.png" id="1_o8mq6"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_rb3bo"]
-size = Vector2(9, 9)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_o61ab"]
 atlas = ExtResource("1_o8mq6")
 region = Rect2(0, 0, 9, 9)
@@ -28,12 +25,15 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rb3bo"]
+size = Vector2(9, 9)
+
 [node name="PlayerBody" type="CharacterBody2D"]
 script = ExtResource("1_1q06c")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_rb3bo")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_fi0ig")
 frame_progress = 0.689686
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_rb3bo")
