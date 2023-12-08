@@ -1,5 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://odltly36ny6f"]
+[gd_scene load_steps=12 format=3 uid="uid://odltly36ny6f"]
 
+[ext_resource type="Script" path="res://Scripts/Levels/level_1.gd" id="1_hq4cw"]
 [ext_resource type="Texture2D" uid="uid://cpyntrna4v63w" path="res://Assets/Tilesets/Grass.png" id="1_l5jpd"]
 [ext_resource type="Texture2D" uid="uid://fttq5kp10vgk" path="res://Assets/Tilesets/Water.png" id="2_2g7x3"]
 [ext_resource type="Texture2D" uid="uid://qsy405eqltua" path="res://Assets/Tilesets/Hills.png" id="3_sx2b0"]
@@ -283,6 +284,7 @@ texture = ExtResource("4_mr2ah")
 sources/1 = SubResource("TileSetAtlasSource_1kcgc")
 
 [node name="Level 1" type="Node2D"]
+script = ExtResource("1_hq4cw")
 
 [node name="BackgroundMap" type="TileMap" parent="."]
 scale = Vector2(2, 2)

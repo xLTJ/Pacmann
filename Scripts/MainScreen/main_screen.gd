@@ -4,9 +4,16 @@ extends Node2D
 @export var enemy_coordinates = [Vector2(8, 8), Vector2(9, 8)]
 @onready var tile_size = 32
 
+@onready var current_level = 0
+
+var current_level_scene
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	next_level()
+	
 	for cow_coordinate in enemy_coordinates:
 		add_enemy(cow_coordinate)
 
@@ -23,3 +30,18 @@ func add_enemy(coordinates):
 	cow.obstacle_tileMap = obstacle_tileMap
 	
 	add_child(cow)
+
+func next_level():
+	if current_level_scene:
+		current_level_scene.queue_free()
+	
+	add_next_scene()
+
+func add_next_scene():
+	current_level += 1
+	current_level_scene = load("res://Scenes/Screens/Levels/level_" + str(current_level) + ".tscn").instantiate()
+	add_child(current_level_scene)
+	print(get_children())
+
+func add_enemies(scene):
+	pass
