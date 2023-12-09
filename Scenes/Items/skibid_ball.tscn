@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://b2f3kkb4fmm1u"]
+
+[ext_resource type="Script" path="res://Scenes/Items/skibid_ball.gd" id="1_h0wd3"]
+[ext_resource type="Texture2D" uid="uid://qka8kl5bq7d0" path="res://Assets/Sprites/Items/skibid_ball..png" id="1_o6jio"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cp7qm"]
+radius = 6.0
+
+[node name="skibid_ball" type="StaticBody2D"]
+scale = Vector2(1.5, 1.5)
+script = ExtResource("1_h0wd3")
+
+[node name="SkibidBall_" type="Sprite2D" parent="."]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1_o6jio")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_cp7qm")

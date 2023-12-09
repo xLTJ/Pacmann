@@ -1,5 +1,8 @@
 extends CharacterBody2D
 
+@onready var main_screen = get_parent().get_parent()
+@onready var hud = main_screen.find_child("HUD")
+
 @export var ObstacleTileMap: TileMap
 @onready var player_sprite = $AnimatedSprite2D
 @export var speed = 5
@@ -7,6 +10,8 @@ extends CharacterBody2D
 const tile_size = 32
 
 var is_moving = false
+var has_powerup = 'none'
+
 var movement_progress = 0.0
 
 var start_position = Vector2(0, 0)
@@ -101,16 +106,45 @@ func check_collision(direction, neighbor_type):
 		if ObstacleTileMap.get_cell_source_id(0, neighbor_cell) == 1:
 			movement_vector = Vector2.ZERO
 
+##########################################
+# Items collection and hitting enemies
+##########################################
+
 func _on_area_2d_body_entered(body):
 	match body.entity_type:
 		"cow":
 			kill_player(body)
 		"skibid_point":
 			collect_skibid_point(body)
+		"skibid_ball":
+			collect_skibid_ball(body)
+
 
 func kill_player(body):
 	get_tree().reload_current_scene()
 
+
 func collect_skibid_point(body):
+	main_screen.player_points += body.points_awarded
+	main_screen.items_left -= 1
+	
+	hud.find_child("points").text = str(main_screen.player_points)
 	body.queue_free()
-	get_parent().get_parent().player_points += body.points_awarded
+
+
+func collect_skibid_ball(body):
+	$skibid_ball_timer.start()
+	has_powerup = 'skibid_ball'
+	
+	main_screen.player_points += body.points_awarded
+	main_screen.items_left -= 1
+	
+	hud.find_child("powerup").text = "skibid ball"
+	hud.find_child("points").text = str(main_screen.player_points)
+	
+	body.queue_free()
+
+
+func _on_skibid_ball_timer_timeout():
+	has_powerup = 'none'
+	hud.find_child("powerup").text = "no powerup"

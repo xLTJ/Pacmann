@@ -39,6 +39,7 @@ func get_coordinates():
 	cow_coordinates.y -= 0.5
 	return cow_coordinates
 
+
 func get_enemy_path():
 	# var cow_path = [Vector2(3,1), Vector2(3, 2), Vector2(3, 1), Vector2(3, 2), Vector2(3, 3), Vector2(4, 3), Vector2(4, 4), Vector2(4, 5), Vector2(5, 5)]
 	var available_directions = get_available_directions()
@@ -46,11 +47,13 @@ func get_enemy_path():
 	var cow_path = [chosen_direction + grid_coordinates]
 	return cow_path
 
+
 func update_target_position(path):
 	new_position = (path[0])
 	is_moving = true
 	path.pop_front()
 	movement_vector = new_position - start_position
+
 
 func move_to_cell(coordinates, delta):
 	movement_progress += speed * delta
@@ -61,6 +64,7 @@ func move_to_cell(coordinates, delta):
 		start_position = coordinates;
 	else:
 		position = start_position * tile_size + (movement_progress * movement_vector * tile_size)  + (Vector2(tile_size / 2, tile_size / 2))
+
 
 func get_available_directions():
 	var available_directions = []

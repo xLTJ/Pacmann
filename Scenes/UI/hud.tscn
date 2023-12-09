@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://dkr5wo7iiartd"]
+
+[ext_resource type="LabelSettings" uid="uid://cbry4kq007dau" path="res://styles/points.tres" id="1_v1mdj"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1daxs"]
+
+[node name="HUD" type="CanvasLayer"]
+
+[node name="points" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -78.0
+offset_top = 3.0
+offset_right = -10.0
+offset_bottom = 51.0
+grow_horizontal = 0
+text = "0"
+label_settings = ExtResource("1_v1mdj")
+horizontal_alignment = 2
+
+[node name="powerup" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -103.0
+offset_top = 39.0
+offset_right = -9.0
+offset_bottom = 87.0
+grow_horizontal = 0
+text = "no powerup"
+label_settings = SubResource("LabelSettings_1daxs")
+horizontal_alignment = 2

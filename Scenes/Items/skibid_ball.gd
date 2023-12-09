@@ -1,7 +1,7 @@
-extends Node2D
+extends StaticBody2D
 
-@export var entity_type = "skibid_point"
-@export var points_awarded = 10
+@export var entity_type = "skibid_ball"
+@export var points_awarded = 100
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

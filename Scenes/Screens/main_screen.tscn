@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cxhdodmw6hymv"]
+[gd_scene load_steps=5 format=3 uid="uid://cxhdodmw6hymv"]
 
 [ext_resource type="Script" path="res://Scripts/MainScreen/main_screen.gd" id="1_1sj2s"]
+[ext_resource type="PackedScene" uid="uid://dkr5wo7iiartd" path="res://Scenes/UI/hud.tscn" id="4_xraug"]
 [ext_resource type="PackedScene" uid="uid://hjla8lp4dola" path="res://Scenes/Entities/player_body.tscn" id="5_8xw84"]
 [ext_resource type="PackedScene" uid="uid://dcj4jmguuiphx" path="res://Scenes/Entities/cow_enemy.tscn" id="7_l4km7"]
 
@@ -10,3 +11,5 @@ cow_instance = ExtResource("7_l4km7")
 player_instance = ExtResource("5_8xw84")
 
 [node name="current_level" type="Node" parent="."]
+
+[node name="HUD" parent="." instance=ExtResource("4_xraug")]
