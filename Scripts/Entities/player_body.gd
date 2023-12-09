@@ -18,9 +18,6 @@ func _ready():
 	start_position = position
 	grid_coordinates = get_coordinates()
 	player_sprite.play()
-	if 1 != 2:
-		print('yes')
-		
 
 
 func _physics_process(delta):

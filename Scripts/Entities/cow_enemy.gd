@@ -25,7 +25,6 @@ func _ready():
 
 func _physics_process(delta):
 	grid_coordinates = get_coordinates()
-	print(grid_coordinates)
 	if !is_moving:
 		cow_path = get_enemy_path()
 		update_target_position(cow_path)
