@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://2jrwfjt0uyyl"]
+
+[ext_resource type="Script" path="res://Scripts/Items/skibid_points.gd" id="1_7f85d"]
+[ext_resource type="Texture2D" uid="uid://cg8et7kvqojon" path="res://Assets/Sprites/Items/skibid_point.png" id="2_nge31"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u1n5l"]
+radius = 3.0
+
+[node name="RigidBody2D" type="StaticBody2D"]
+script = ExtResource("1_7f85d")
+
+[node name="skibid_point" type="Sprite2D" parent="."]
+texture = ExtResource("2_nge31")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_u1n5l")

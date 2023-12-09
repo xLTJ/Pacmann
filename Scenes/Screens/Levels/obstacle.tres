@@ -1,0 +1,25 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://d1dliuaxy1qx2"]
+
+[ext_resource type="Texture2D" uid="uid://bd4j5h2qqycxv" path="res://Assets/Tilesets/Fences.png" id="1_gox1m"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1kcgc"]
+texture = ExtResource("1_gox1m")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[resource]
+sources/1 = SubResource("TileSetAtlasSource_1kcgc")

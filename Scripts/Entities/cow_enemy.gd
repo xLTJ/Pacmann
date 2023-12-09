@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+@export var entity_type = "cow"
+
 @export var speed = 3
 @export var obstacle_tileMap: TileMap
 
@@ -87,9 +89,9 @@ func get_random_cell():
 
 
 
-func _on_area_2d_body_entered(body):
-	print("player died")
-	kill_player(body)
+#func _on_area_2d_body_entered(body):
+#	print("player died")
+#	kill_player(body)
 
-func kill_player(body):
-	get_tree().reload_current_scene()
+#func kill_player(body):
+#	get_tree().reload_current_scene()

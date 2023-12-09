@@ -100,3 +100,17 @@ func check_collision(direction, neighbor_type):
 		var neighbor_cell = ObstacleTileMap.get_neighbor_cell(grid_coordinates, neighbor_type)
 		if ObstacleTileMap.get_cell_source_id(0, neighbor_cell) == 1:
 			movement_vector = Vector2.ZERO
+
+func _on_area_2d_body_entered(body):
+	match body.entity_type:
+		"cow":
+			kill_player(body)
+		"skibid_point":
+			collect_skibid_point(body)
+
+func kill_player(body):
+	get_tree().reload_current_scene()
+
+func collect_skibid_point(body):
+	body.queue_free()
+	get_parent().get_parent().player_points += body.points_awarded

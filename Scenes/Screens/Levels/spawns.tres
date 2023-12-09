@@ -1,0 +1,18 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://x4ujnbeib3e1"]
+
+[ext_resource type="Texture2D" uid="uid://jx1qp22eqb0x" path="res://Assets/Tilesets/SpawnPoints.png" id="1_l8dhw"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hcas8"]
+texture = ExtResource("1_l8dhw")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_hcas8")

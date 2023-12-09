@@ -8,3 +8,5 @@
 script = ExtResource("1_1sj2s")
 cow_instance = ExtResource("7_l4km7")
 player_instance = ExtResource("5_8xw84")
+
+[node name="current_level" type="Node" parent="."]
