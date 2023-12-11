@@ -115,7 +115,7 @@ func check_collision(direction, neighbor_type):
 func _on_area_2d_body_entered(body):
 	match body.entity_type:
 		"cow":
-			kill_player(body)
+			hit_cow(body)
 		"skibid_point":
 			collect_skibid_point(body)
 		"skibid_ball":
@@ -123,14 +123,20 @@ func _on_area_2d_body_entered(body):
 
 
 func hit_cow(body):
-	if has_powerup == 'none':
-		kill_player(body)
+	match has_powerup:
+		'none':
+			kill_player(body)
+		'skibid_ball':
+			kill_cow(body)
+
 
 func kill_player(body):
 	get_tree().reload_current_scene()
 
+
 func kill_cow(body):
-	body.cow_path = [Vector2(6, 8), Vector2(6, 8)]
+	main_screen.restart_enemy(body.enemy_id)
+
 
 func collect_skibid_point(body):
 	main_screen.player_points += body.points_awarded

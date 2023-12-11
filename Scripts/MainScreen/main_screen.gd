@@ -1,4 +1,5 @@
 extends Node2D
+
 @export var cow_instance: PackedScene
 @export var player_instance: PackedScene
 @onready var tile_size = 32
@@ -15,6 +16,7 @@ var current_level_scene
 var player_points = 0
 var items_left = 0
 var player
+var enemies = {}
 
 
 # Called when the node enters the scene tree for the first time.
@@ -99,9 +101,16 @@ func add_enemy(coordinates):
 
 	cow.obstacle_tileMap = obstacle_tileMap
 	cow.player = player
+	cow.enemy_id = len(enemies)
+	enemies[cow.enemy_id] = cow
 	
 	current_level_node.add_child(cow)
 
+
+func restart_enemy(enemy_id):
+	var spawn_coordinates = enemies[enemy_id].initial_coordinates
+	enemies[enemy_id].queue_free()
+	add_enemy(spawn_coordinates)
 
 ###################################
 # Helper functions
