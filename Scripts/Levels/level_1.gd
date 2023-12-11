@@ -23,6 +23,7 @@ func _process(delta):
 
 func get_spawn_coordinates():
 	entity_coordinates["player_spawn_coordinates"] = get_cells_by_id(8)[0]
+	print(entity_coordinates["player_spawn_coordinates"])
 	entity_coordinates["enemy_coordinates"] = get_cells_by_id(7)
 	entity_coordinates["skibid_point_coordinates"] = get_cells_by_id(0)
 	entity_coordinates["skibid_ball_coordinates"] = get_cells_by_id(1)

@@ -39,7 +39,6 @@ frame_progress = 0.689686
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_rb3bo")
 
 [node name="skibid_ball_timer" type="Timer" parent="."]

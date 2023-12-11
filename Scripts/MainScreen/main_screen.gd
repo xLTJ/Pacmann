@@ -14,6 +14,7 @@ var current_level_scene
 
 var player_points = 0
 var items_left = 0
+var player
 
 
 # Called when the node enters the scene tree for the first time.
@@ -55,7 +56,7 @@ func add_level_scene():
 
 # Restarts the player for the new map
 func restart_player():
-	var player = player_instance.instantiate()
+	player = player_instance.instantiate()
 	player.ObstacleTileMap = obstacle_tileMap
 	
 	var player_coordinates = current_level_scene.entity_coordinates["player_spawn_coordinates"]
@@ -64,6 +65,7 @@ func restart_player():
 	current_level_node.add_child(player)
 
 
+# adds all items of a type
 func add_item_type(item_type):
 	var item_coordinates = current_level_scene.entity_coordinates[item_type + "_coordinates"]
 	
@@ -71,6 +73,7 @@ func add_item_type(item_type):
 		add_item(item_type, coordinate)
 
 
+# adds individual item
 func add_item(item_type, coordinates):
 	var item_instance = load("res://Scenes/Items/" + item_type + ".tscn").instantiate()
 	item_instance.position = coordinates_to_position(coordinates)
@@ -95,6 +98,7 @@ func add_enemy(coordinates):
 	cow.position = coordinates_to_position(coordinates)
 
 	cow.obstacle_tileMap = obstacle_tileMap
+	cow.player = player
 	
 	current_level_node.add_child(cow)
 

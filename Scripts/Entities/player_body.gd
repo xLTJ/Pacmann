@@ -18,6 +18,7 @@ var start_position = Vector2(0, 0)
 var movement_vector = Vector2(0, 0)
 var movement_direction = 'right'
 var grid_coordinates = Vector2(0, 0)
+var last_coordinates
 
 func _ready():
 	start_position = position
@@ -30,6 +31,7 @@ func _physics_process(delta):
 	player_input()
 	if !is_moving:
 		update_direction()
+		last_coordinates = grid_coordinates
 	move_player(delta)
 
 
@@ -120,9 +122,15 @@ func _on_area_2d_body_entered(body):
 			collect_skibid_ball(body)
 
 
+func hit_cow(body):
+	if has_powerup == 'none':
+		kill_player(body)
+
 func kill_player(body):
 	get_tree().reload_current_scene()
 
+func kill_cow(body):
+	body.cow_path = [Vector2(6, 8), Vector2(6, 8)]
 
 func collect_skibid_point(body):
 	main_screen.player_points += body.points_awarded
