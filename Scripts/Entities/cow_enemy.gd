@@ -6,6 +6,7 @@ extends CharacterBody2D
 var enemy_id = 0
 
 @export var speed = 3
+@export var transition_time = 2
 @export var obstacle_tileMap: TileMap
 @onready var tilemap_rect = obstacle_tileMap.get_used_rect().size
 @onready var player
@@ -23,6 +24,8 @@ var initial_coordinates = Vector2(0, 0)
 var movement_vector = Vector2(0, 0)
 
 var is_moving = false
+var is_weak = false
+var is_on_route = false
 var movement_progress = 0.0
 
 var cow_path = Vector2(0, 0)
@@ -55,13 +58,14 @@ func get_coordinates():
 
 
 func get_enemy_path():
-	var pathfinding_mode = 'shortest_path'
+	var pathfinding_mode = 'near_player'
 	cow_path = pathfinding(grid_coordinates, player.last_coordinates, pathfinding_mode)
+	if not cow_path:
+		cow_path = get_enemy_path()
 	return cow_path
 
 
 func update_target_position(path):
-	print(path)
 	new_position = (path[0])
 	is_moving = true
 	path.pop_front()
@@ -108,13 +112,12 @@ func get_all_cells():
 	var grid_ids = []
 	rows = tilemap_rect.x
 	columns = tilemap_rect.y
-	for x in range(rows):
+	for row in range(rows):
 		grid_ids.append([])
-		for y in range(columns):
-			var cell_id = Vector2(y, x)
-			grid_ids[x].append(obstacle_tileMap.get_cell_source_id(0, cell_id))
+		for column in range(columns):
+			var cell_id = Vector2(column, row)
+			grid_ids[row].append(obstacle_tileMap.get_cell_source_id(0, cell_id))
 	
-	print(grid_ids)
 	return grid_ids
 
 
@@ -123,7 +126,22 @@ func kill_cow():
 	grid_coordinates = Vector2(0, 0)
 	position = initial_coordinates
 	start_position = position
-	
+
+
+func weak_cow():
+	is_weak = true
+	$EvilCowWeak.show()
+
+func unweak_cow():
+	if !is_weak:
+		return
+	$EvilCowTransition.show()
+	await get_tree().create_timer(2).timeout
+	is_weak = false
+	$EvilCowWeak.hide()
+	$EvilCowTransition.hide()
+
+
 func pathfinding(start, destination, mode):
 	match mode:
 		'shortest_path':
@@ -133,3 +151,33 @@ func pathfinding(start, destination, mode):
 			var chosen_direction = available_directions.pick_random()
 			var path = [chosen_direction + grid_coordinates]
 			return path
+		'near_player':
+			if is_on_route:
+				return
+			
+			var near_destination = find_random_tile_in_radius(destination, 3)
+			return a_star_script.a_star(grid, start, near_destination, rows, columns)
+
+
+func find_random_tile_in_radius(center, radius):
+	if center == Vector2(16, 7) || center == Vector2(16, 11):
+		pass
+	var unblocked_tiles = []
+	
+	for row in range(center.y - radius, center.y + radius + 1):
+		if row not in range(tilemap_rect.y - 1):
+			break
+			
+		for column in range(center.x - radius, center.x + radius + 1):
+			if column not in range(tilemap_rect.x - 1):
+				break
+				
+			var random_tile = grid[row][column]
+			
+			if random_tile != 1 && random_tile != 0:
+				unblocked_tiles.append(Vector2(column, row))
+	
+	var chosen_tile = unblocked_tiles[randi() % unblocked_tiles.size()]
+	print("chosen tile: " + str(chosen_tile))
+	return chosen_tile
+	

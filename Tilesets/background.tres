@@ -6,6 +6,7 @@
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nuy2t"]
 texture = ExtResource("1_lwqxs")
+use_texture_padding = false
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0

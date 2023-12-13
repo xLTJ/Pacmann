@@ -15,8 +15,11 @@ var current_level_scene
 
 var player_points = 0
 var items_left = 0
+var powerup = ''
+
 var player
 var enemies = {}
+var window = get_window()
 
 
 # Called when the node enters the scene tree for the first time.
@@ -89,28 +92,44 @@ func add_item(item_type, coordinates):
 func add_enemies():
 	var enemy_coordinates = current_level_scene.entity_coordinates["enemy_coordinates"]
 	
-	for coordinate in enemy_coordinates:
-		add_enemy(coordinate)
+	for coordinate_index in range(enemy_coordinates.size()):
+		add_enemy(enemy_coordinates[coordinate_index], coordinate_index)
 
 
 # Function for adding enemies
-func add_enemy(coordinates):
+func add_enemy(coordinates, enemy_id):
 	var cow = cow_instance.instantiate()
 	cow.grid_coordinates = coordinates
 	cow.position = coordinates_to_position(coordinates)
 
 	cow.obstacle_tileMap = obstacle_tileMap
 	cow.player = player
-	cow.enemy_id = len(enemies)
-	enemies[cow.enemy_id] = cow
+	cow.enemy_id = enemy_id
+	enemies[enemy_id] = cow
 	
 	current_level_node.add_child(cow)
 
 
+# deletes the enemy and makes a new one with the same id overwriting the last one
 func restart_enemy(enemy_id):
 	var spawn_coordinates = enemies[enemy_id].initial_coordinates
 	enemies[enemy_id].queue_free()
-	add_enemy(spawn_coordinates)
+	add_enemy(spawn_coordinates, enemy_id)
+
+func pickup_powerup(new_powerup):
+	powerup = new_powerup
+	match powerup:
+		"skibid_ball":
+			for enemy in enemies:
+				enemies[enemy].weak_cow()
+
+
+# handles the event of a powerup running out. Is called from player_body.gd
+func powerup_runout():
+	match powerup:
+		"skibid_ball":
+			for enemy in enemies:
+				enemies[enemy].unweak_cow()
 
 ###################################
 # Helper functions

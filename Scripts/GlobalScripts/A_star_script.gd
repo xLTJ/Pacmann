@@ -93,7 +93,6 @@ func a_star(grid_list, source, destination, row_number, column_number):
 	# I'll be storing each node as a tuple, with the first value being the f value
 	# The second value is the node coordinates that can be used to access the node information
 	open_list.append([source_f, source])
-
 	while open_list.size() > 0:
 		# Sets the node to be explored to the next node in the open list and removes it from the list.
 		var next_node = open_list.pop_front()
@@ -129,7 +128,7 @@ func a_star(grid_list, source, destination, row_number, column_number):
 		
 		# Adds the node to the closed list
 		next_node_info.close()
-		get_current_grid(grid, node_info)
+		# get_current_grid(grid, node_info)
 		# yield(get_tree().create_timer(0.5), "timeout")
 
 	print('there is no path to the destination')
@@ -190,6 +189,7 @@ func get_current_grid(grid_list, grid_info):
 func show_path(end_node, node_info, source):
 	var path = []
 	var node = end_node[1]
+	print(node)
 	path.insert(0, node)
 	while node != source:
 		var current_node_info = get_a_star_node(node_info, node)
@@ -198,6 +198,9 @@ func show_path(end_node, node_info, source):
 		node.y = parent_node[1]
 		path.insert(0, node)
 	path.pop_front()
-
+	
+	if path == []:
+		pass
+	
 	print("final path is " + str(path))
 	return path

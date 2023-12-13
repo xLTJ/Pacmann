@@ -20,6 +20,7 @@ var movement_direction = 'right'
 var grid_coordinates = Vector2(0, 0)
 var last_coordinates
 
+
 func _ready():
 	start_position = position
 	grid_coordinates = get_coordinates()
@@ -123,11 +124,11 @@ func _on_area_2d_body_entered(body):
 
 
 func hit_cow(body):
-	match has_powerup:
-		'none':
-			kill_player(body)
-		'skibid_ball':
-			kill_cow(body)
+	if body.is_weak == true:
+		kill_cow(body)
+		return
+	
+	kill_player(body)
 
 
 func kill_player(body):
@@ -135,7 +136,8 @@ func kill_player(body):
 
 
 func kill_cow(body):
-	main_screen.restart_enemy(body.enemy_id)
+	if body.is_weak == true:
+		main_screen.restart_enemy(body.enemy_id)
 
 
 func collect_skibid_point(body):
@@ -150,8 +152,10 @@ func collect_skibid_ball(body):
 	$skibid_ball_timer.start()
 	has_powerup = 'skibid_ball'
 	
+	
 	main_screen.player_points += body.points_awarded
 	main_screen.items_left -= 1
+	main_screen.pickup_powerup('skibid_ball')
 	
 	hud.find_child("powerup").text = "skibid ball"
 	hud.find_child("points").text = str(main_screen.player_points)
@@ -162,3 +166,9 @@ func collect_skibid_ball(body):
 func _on_skibid_ball_timer_timeout():
 	has_powerup = 'none'
 	hud.find_child("powerup").text = "no powerup"
+	main_screen.powerup_runout()
+
+
+func change_powerup(powerup):
+	has_powerup = powerup
+	main_screen.pickup_powerup(powerup)

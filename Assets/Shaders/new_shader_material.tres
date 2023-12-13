@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://c6706ckrjvybt"]
+
+[ext_resource type="Shader" path="res://Assets/Shaders/new_shader_material.gdshader" id="1_jst6u"]
+
+[resource]
+shader = ExtResource("1_jst6u")
+shader_parameter/glow_size = 0.1

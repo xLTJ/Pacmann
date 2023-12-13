@@ -1,18 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dcj4jmguuiphx"]
+[gd_scene load_steps=6 format=3 uid="uid://dcj4jmguuiphx"]
 
 [ext_resource type="Script" path="res://Scripts/Entities/cow_enemy.gd" id="1_a0u7x"]
-[ext_resource type="Texture2D" uid="uid://bju2x4vtmj205" path="res://Assets/Sprites/Cow(real).png" id="1_lbav2"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_xghqs"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("1_lbav2")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+[ext_resource type="Texture2D" uid="uid://ccwydhgnlwpbj" path="res://Assets/Sprites/EvilCow.png" id="2_pel7o"]
+[ext_resource type="Texture2D" uid="uid://hqfhnkg4f321" path="res://Assets/Sprites/EvilCowWeak.png" id="3_fupav"]
+[ext_resource type="Texture2D" uid="uid://e1ifbschxko0" path="res://Assets/Sprites/EvilCowTransition.png" id="4_hf5s3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mimoe"]
 size = Vector2(16, 16)
@@ -21,12 +12,22 @@ size = Vector2(16, 16)
 scale = Vector2(2, 2)
 script = ExtResource("1_a0u7x")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_xghqs")
-
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_mimoe")
+
+[node name="EvilCow" type="Sprite2D" parent="."]
+texture = ExtResource("2_pel7o")
+
+[node name="EvilCowWeak" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("3_fupav")
+
+[node name="EvilCowTransition" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("4_hf5s3")
+
+[node name="Timer" type="Timer" parent="."]
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
