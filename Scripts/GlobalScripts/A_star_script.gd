@@ -98,7 +98,7 @@ func a_star(grid_list, source, destination, row_number, column_number):
 		var next_node = open_list.pop_front()
 		
 		if is_destination(next_node[1], destination):
-			print('waow, found destination')
+			# print('waow, found destination')
 			return show_path(next_node, node_info, source)
 		
 		var next_node_info = get_a_star_node(node_info, next_node[1])
@@ -202,5 +202,5 @@ func show_path(end_node, node_info, source):
 	if path == []:
 		pass
 	
-	print("final path is " + str(path))
+	# print("final path is " + str(path))
 	return path

@@ -25,6 +25,7 @@ var movement_vector = Vector2(0, 0)
 
 var is_moving = false
 var is_weak = false
+var is_transitioning = false
 var is_on_route = false
 var movement_progress = 0.0
 
@@ -58,10 +59,13 @@ func get_coordinates():
 
 
 func get_enemy_path():
-	var pathfinding_mode = 'near_player'
+	var pathfinding_mode = 'dynamic'
 	cow_path = pathfinding(grid_coordinates, player.last_coordinates, pathfinding_mode)
 	if not cow_path:
 		cow_path = get_enemy_path()
+	if len(cow_path) < 2 && cow_path:
+			is_on_route = false
+	
 	return cow_path
 
 
@@ -105,13 +109,15 @@ func check_collision(direction, neighbor_type):
 	else:
 		return true
 
+
 func get_random_cell():
 	pass
 
+
 func get_all_cells():
 	var grid_ids = []
-	rows = tilemap_rect.x
-	columns = tilemap_rect.y
+	rows = tilemap_rect.y
+	columns = tilemap_rect.x
 	for row in range(rows):
 		grid_ids.append([])
 		for column in range(columns):
@@ -131,46 +137,73 @@ func kill_cow():
 func weak_cow():
 	is_weak = true
 	$EvilCowWeak.show()
+	if is_transitioning:
+		is_transitioning = false
+		$EvilCowTransition.hide()
+
 
 func unweak_cow():
 	if !is_weak:
 		return
+	is_transitioning = true
 	$EvilCowTransition.show()
 	await get_tree().create_timer(2).timeout
-	is_weak = false
-	$EvilCowWeak.hide()
-	$EvilCowTransition.hide()
+	if is_transitioning:
+		is_weak = false
+		$EvilCowWeak.hide()
+		$EvilCowTransition.hide()
 
 
 func pathfinding(start, destination, mode):
 	match mode:
 		'shortest_path':
-			return a_star_script.a_star(grid, start, destination, rows, columns)
+			return shortest_path(start, destination)
 		'random_cell':
-			var available_directions = get_available_directions()
-			var chosen_direction = available_directions.pick_random()
-			var path = [chosen_direction + grid_coordinates]
-			return path
+			return random_cell()
 		'near_player':
-			if is_on_route:
-				return
-			
-			var near_destination = find_random_tile_in_radius(destination, 3)
-			return a_star_script.a_star(grid, start, near_destination, rows, columns)
+			return near_player(start, destination, 5)
+		'dynamic':
+			var distance_to_player = grid_coordinates.distance_to(player.grid_coordinates)
+			if distance_to_player > 6:
+				if is_on_route && cow_path:
+					return cow_path
+				
+				is_on_route = true
+				return near_player(start, destination, int(distance_to_player))
+			else:
+				is_on_route = false
+				return shortest_path(start, destination)
+
+
+func shortest_path(start, destination):
+	return a_star_script.a_star(grid, start, destination, rows, columns)
+
+
+func random_cell():
+	var available_directions = get_available_directions()
+	var chosen_direction = available_directions.pick_random()
+	var path = [chosen_direction + grid_coordinates]
+	return path
+
+
+func near_player(start, destination, radius):
+	var near_destination = find_random_tile_in_radius(destination, radius)
+	return a_star_script.a_star(grid, start, near_destination, rows, columns)
 
 
 func find_random_tile_in_radius(center, radius):
-	if center == Vector2(16, 7) || center == Vector2(16, 11):
+	print(center)
+	if center == Vector2(4, 16) || center == Vector2(3, 16):
 		pass
 	var unblocked_tiles = []
 	
 	for row in range(center.y - radius, center.y + radius + 1):
 		if row not in range(tilemap_rect.y - 1):
-			break
+			continue
 			
 		for column in range(center.x - radius, center.x + radius + 1):
 			if column not in range(tilemap_rect.x - 1):
-				break
+				continue
 				
 			var random_tile = grid[row][column]
 			
@@ -178,6 +211,6 @@ func find_random_tile_in_radius(center, radius):
 				unblocked_tiles.append(Vector2(column, row))
 	
 	var chosen_tile = unblocked_tiles[randi() % unblocked_tiles.size()]
-	print("chosen tile: " + str(chosen_tile))
+	# print("chosen tile: " + str(chosen_tile))
 	return chosen_tile
-	
+

@@ -4,7 +4,7 @@ extends Node2D
 @export var player_instance: PackedScene
 @onready var tile_size = 32
 
-@onready var current_level = 1
+@onready var current_level = 3
 
 @onready var current_level_node = $current_level
 @onready var hud = $HUD
@@ -45,6 +45,7 @@ func load_level():
 	add_level_scene()
 	add_item_type("skibid_point")
 	add_item_type("skibid_ball")
+	add_item_type("speed_powerup")
 	restart_player()
 	add_enemies()
 	item_spawn_tilemap.hide()
@@ -131,6 +132,11 @@ func powerup_runout():
 			for enemy in enemies:
 				enemies[enemy].unweak_cow()
 
+
+func award_points(points):
+	player_points += points
+	$HUD.find_child("points").text = str(player_points)
+	
 ###################################
 # Helper functions
 ###################################

@@ -121,6 +121,8 @@ func _on_area_2d_body_entered(body):
 			collect_skibid_point(body)
 		"skibid_ball":
 			collect_skibid_ball(body)
+		"speed_powerup":
+			collect_speed(body)
 
 
 func hit_cow(body):
@@ -138,13 +140,13 @@ func kill_player(body):
 func kill_cow(body):
 	if body.is_weak == true:
 		main_screen.restart_enemy(body.enemy_id)
+		main_screen.award_points(200)
 
 
 func collect_skibid_point(body):
-	main_screen.player_points += body.points_awarded
+	main_screen.award_points(body.points_awarded)
 	main_screen.items_left -= 1
 	
-	hud.find_child("points").text = str(main_screen.player_points)
 	body.queue_free()
 
 
@@ -152,13 +154,11 @@ func collect_skibid_ball(body):
 	$skibid_ball_timer.start()
 	has_powerup = 'skibid_ball'
 	
-	
-	main_screen.player_points += body.points_awarded
+	main_screen.award_points(body.points_awarded)
 	main_screen.items_left -= 1
 	main_screen.pickup_powerup('skibid_ball')
 	
 	hud.find_child("powerup").text = "skibid ball"
-	hud.find_child("points").text = str(main_screen.player_points)
 	
 	body.queue_free()
 
@@ -167,6 +167,23 @@ func _on_skibid_ball_timer_timeout():
 	has_powerup = 'none'
 	hud.find_child("powerup").text = "no powerup"
 	main_screen.powerup_runout()
+
+
+func collect_speed(body):
+	$speed_timer.start()
+	has_powerup = 'speed_powerup'
+	
+	main_screen.award_points(body.points_awarded)
+	main_screen.items_left -= 1
+	speed = body.speed_boost
+	
+	hud.find_child("powerup").text = "speed"
+	
+	body.queue_free()
+
+
+func _on_speed_timer_timeout():
+	speed = 5
 
 
 func change_powerup(powerup):

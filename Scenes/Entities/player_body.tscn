@@ -45,5 +45,10 @@ shape = SubResource("RectangleShape2D_rb3bo")
 wait_time = 5.0
 one_shot = true
 
+[node name="speed_timer" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="timeout" from="skibid_ball_timer" to="." method="_on_skibid_ball_timer_timeout"]
+[connection signal="timeout" from="speed_timer" to="." method="_on_speed_timer_timeout"]
