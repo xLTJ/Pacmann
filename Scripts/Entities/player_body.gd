@@ -113,6 +113,8 @@ func check_collision(direction, neighbor_type):
 # Items collection and hitting enemies
 ##########################################
 
+
+# Executes when the player hits another body. Every body type has a variable called "entity_type" that stores what the body is, and then another function is executed based on this.
 func _on_area_2d_body_entered(body):
 	match body.entity_type:
 		"cow":
@@ -125,6 +127,7 @@ func _on_area_2d_body_entered(body):
 			collect_speed(body)
 
 
+# Function for when the player hits a cow
 func hit_cow(body):
 	if body.is_weak == true:
 		kill_cow(body)
@@ -133,16 +136,18 @@ func hit_cow(body):
 	kill_player(body)
 
 
+# When the player dies the game just restarts for now. Can be changed to whatever.
 func kill_player(body):
 	get_tree().reload_current_scene()
 
 
+# When the cow dies it gets restarted in the main_screen scene.
 func kill_cow(body):
-	if body.is_weak == true:
-		main_screen.restart_enemy(body.enemy_id)
-		main_screen.award_points(200)
+	main_screen.restart_enemy(body.enemy_id)
+	main_screen.award_points(200)
 
 
+# When a skibid point is hit, the player is awarded points and the bodt is removed.
 func collect_skibid_point(body):
 	main_screen.award_points(body.points_awarded)
 	main_screen.items_left -= 1
@@ -150,6 +155,8 @@ func collect_skibid_point(body):
 	body.queue_free()
 
 
+# When a skibid_ball is collected a timer starts, and the function "pickup_powerup" is called on the main_screen scene. That function handles what happends to other entities than the player.
+# After that the body is removed.
 func collect_skibid_ball(body):
 	$skibid_ball_timer.start()
 	has_powerup = 'skibid_ball'
@@ -163,12 +170,14 @@ func collect_skibid_ball(body):
 	body.queue_free()
 
 
+# When the timer for the skibid_ball powerup runs out the 
 func _on_skibid_ball_timer_timeout():
 	has_powerup = 'none'
 	hud.find_child("powerup").text = "no powerup"
-	main_screen.powerup_runout()
+	main_screen.powerup_runout('skibid_ball')
 
 
+# When a speed poweruo is collected a timer starts, and the players speed is increased. The "pickup_powerup" is not called as this only effects the player. After that the bodt is removed
 func collect_speed(body):
 	$speed_timer.start()
 	has_powerup = 'speed_powerup'
@@ -181,11 +190,6 @@ func collect_speed(body):
 	
 	body.queue_free()
 
-
+# once the timer for the speed powerup runs out, the players speed resets.
 func _on_speed_timer_timeout():
 	speed = 5
-
-
-func change_powerup(powerup):
-	has_powerup = powerup
-	main_screen.pickup_powerup(powerup)

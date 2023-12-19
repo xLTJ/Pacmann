@@ -42,8 +42,10 @@ class a_star_node:
 
 # Finds the h value for a cell based on its coordinates using Euclidean distance
 func get_h_value(cell_coords, destination_coords):
-	return sqrt(pow((cell_coords.x - destination_coords.x), 2) + pow((cell_coords.y - destination_coords.y), 2))
-
+	# return sqrt((cell_coords.x - destination_coords.x) ** 2 + (cell_coords.y - destination_coords.y) ** 2)
+	var dx = abs(cell_coords.x - destination_coords.x)
+	var dy = abs(cell_coords.y - destination_coords.y)
+	return dx + dy
 
 # Checks if a cell is inside the grid
 func is_in_grid(cell_coords):
@@ -169,21 +171,6 @@ func find_successor(x, y, node_info, open_list, parent_node, destination, grid_l
 			i += 1
 
 		open_list.append([node_f, Vector2(x, y)])
-
-
-func get_current_grid(grid_list, grid_info):
-	var j = 0
-	var temp_grid = []
-	for row in grid_list:
-		var k = 0
-		var temp_row = row
-		for item in temp_row:
-			if grid_info[j][k].closed:
-				temp_row[k] = 5
-			k += 1
-		j += 1
-		temp_grid.append(temp_row)
-	return temp_grid
 
 
 func show_path(end_node, node_info, source):

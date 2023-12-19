@@ -21,6 +21,7 @@ func _process(delta):
 	pass
 
 
+# Gets the spawn coordinates for all the different things that needs to be spawned. This information is gathered from the "spawn_map" tilemap.
 func get_spawn_coordinates():
 	entity_coordinates["player_spawn_coordinates"] = get_cells_by_id(8)[0]
 	entity_coordinates["enemy_coordinates"] = get_cells_by_id(7)
@@ -29,6 +30,7 @@ func get_spawn_coordinates():
 	entity_coordinates["speed_powerup_coordinates"] = get_cells_by_id(2)
 
 
+# Gets all cells of a specific id in the "spawn_map" tilemap.
 func get_cells_by_id(cell_id):
 	var spawn_cells_int = spawn_map.get_used_cells_by_id(0, -1, Vector2i(cell_id, 0))
 	var spawn_cells = []
@@ -37,7 +39,3 @@ func get_cells_by_id(cell_id):
 		spawn_cells.append(Vector2(cell.x, cell.y))
 	
 	return spawn_cells
-
-
-func coordinates_to_position(coordinates):
-	return coordinates * tile_size + Vector2(tile_size / 2, tile_size / 2)

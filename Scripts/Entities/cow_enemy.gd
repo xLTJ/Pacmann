@@ -2,8 +2,10 @@ extends CharacterBody2D
 
 @onready var a_star_script = get_node("/root/A_star_script")
 
+
 @export var entity_type = "cow"
 var enemy_id = 0
+var pathfinding_mode = 'dynamic'
 
 @export var speed = 3
 @export var transition_time = 2
@@ -36,11 +38,6 @@ func _ready():
 	initial_coordinates = grid_coordinates
 	grid = get_all_cells()
 	print(player)
-	# cow_path = get_enemy_path()
-	#start_position = Vector2(tile_size * 4, tile_size * 2)
-	#position = start_position
-	# grid_coordinates = get_coordinates()
-	# cow_path = Vector2(3, 1)
 
 
 func _physics_process(delta):
@@ -51,6 +48,7 @@ func _physics_process(delta):
 	move_to_cell(new_position, delta)
 
 
+# Gets the cows current coordinates on the tilemap, based on its position.
 func get_coordinates():
 	var cow_coordinates = (position / tile_size)
 	cow_coordinates.x -= 0.5
@@ -58,8 +56,8 @@ func get_coordinates():
 	return cow_coordinates
 
 
+# Gets the path that the cow should follow based on its pathfinding mode.
 func get_enemy_path():
-	var pathfinding_mode = 'dynamic'
 	cow_path = pathfinding(grid_coordinates, player.last_coordinates, pathfinding_mode)
 	if not cow_path:
 		cow_path = get_enemy_path()
@@ -69,6 +67,7 @@ func get_enemy_path():
 	return cow_path
 
 
+# Updates the cell that the cow should move towards. This cell is the first in the "path" array. After this cell has been set the cell is removed from the array.
 func update_target_position(path):
 	new_position = (path[0])
 	is_moving = true
@@ -76,6 +75,7 @@ func update_target_position(path):
 	movement_vector = new_position - start_position
 
 
+# Moves the cow towards the target cell based on the coordinates provided.
 func move_to_cell(coordinates, delta):
 	movement_progress += speed * delta
 	if movement_progress >= 1.0:
@@ -87,6 +87,7 @@ func move_to_cell(coordinates, delta):
 		position = start_position * tile_size + (movement_progress * movement_vector * tile_size)  + (Vector2(tile_size / 2, tile_size / 2))
 
 
+# Checks available movement directions for the cow
 func get_available_directions():
 	var available_directions = []
 	if check_collision(Vector2(0, -1), TileSet.CELL_NEIGHBOR_TOP_SIDE):
@@ -110,10 +111,7 @@ func check_collision(direction, neighbor_type):
 		return true
 
 
-func get_random_cell():
-	pass
-
-
+# Gets the cell id for every cell in the obstacle tilemap
 func get_all_cells():
 	var grid_ids = []
 	rows = tilemap_rect.y
@@ -127,13 +125,7 @@ func get_all_cells():
 	return grid_ids
 
 
-func kill_cow():
-	cow_path = []
-	grid_coordinates = Vector2(0, 0)
-	position = initial_coordinates
-	start_position = position
-
-
+# Makes the cow weak and changes its appearance
 func weak_cow():
 	is_weak = true
 	$EvilCowWeak.show()
@@ -142,6 +134,7 @@ func weak_cow():
 		$EvilCowTransition.hide()
 
 
+# Starts a transition-phrase where the cow changes its outline to show that its about to turn back. After the timer ends, the cow is reverted back to its normal unweak state.
 func unweak_cow():
 	if !is_weak:
 		return
@@ -154,6 +147,7 @@ func unweak_cow():
 		$EvilCowTransition.hide()
 
 
+# Handles the different pathfinding modes for the cow.
 func pathfinding(start, destination, mode):
 	match mode:
 		'shortest_path':
@@ -175,10 +169,12 @@ func pathfinding(start, destination, mode):
 				return shortest_path(start, destination)
 
 
+# A* pathfinding the the shortest path directly towards the player.
 func shortest_path(start, destination):
 	return a_star_script.a_star(grid, start, destination, rows, columns)
 
 
+# Choses a random cell bordering the one the cow occupies and returns those coordinates.
 func random_cell():
 	var available_directions = get_available_directions()
 	var chosen_direction = available_directions.pick_random()
@@ -186,11 +182,13 @@ func random_cell():
 	return path
 
 
+# Gets a random tile withing a certain radius around the player and uses the A* algoritm to find the shortest path towards this cell.
 func near_player(start, destination, radius):
 	var near_destination = find_random_tile_in_radius(destination, radius)
 	return a_star_script.a_star(grid, start, near_destination, rows, columns)
 
 
+# Find a random unblocked tile withing a certain radius around the player.
 func find_random_tile_in_radius(center, radius):
 	print(center)
 	if center == Vector2(4, 16) || center == Vector2(3, 16):

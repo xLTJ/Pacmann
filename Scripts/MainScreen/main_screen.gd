@@ -1,10 +1,13 @@
 extends Node2D
 
+@onready var gloabl_vars = get_node("/root/global_variables")
+
 @export var cow_instance: PackedScene
 @export var player_instance: PackedScene
 @onready var tile_size = 32
 
-@onready var current_level = 3
+@onready var current_level = 1
+@onready var enemy_pathfinding_mode = gloabl_vars.pathfinding_mode
 
 @onready var current_level_node = $current_level
 @onready var hud = $HUD
@@ -106,6 +109,7 @@ func add_enemy(coordinates, enemy_id):
 	cow.obstacle_tileMap = obstacle_tileMap
 	cow.player = player
 	cow.enemy_id = enemy_id
+	cow.pathfinding_mode = enemy_pathfinding_mode
 	enemies[enemy_id] = cow
 	
 	current_level_node.add_child(cow)
@@ -126,13 +130,14 @@ func pickup_powerup(new_powerup):
 
 
 # handles the event of a powerup running out. Is called from player_body.gd
-func powerup_runout():
-	match powerup:
+func powerup_runout(old_powerup):
+	match old_powerup:
 		"skibid_ball":
 			for enemy in enemies:
 				enemies[enemy].unweak_cow()
 
 
+# Awards the player points and updates the HUD
 func award_points(points):
 	player_points += points
 	$HUD.find_child("points").text = str(player_points)
@@ -141,5 +146,7 @@ func award_points(points):
 # Helper functions
 ###################################
 
+
+# Converts coordinates on the tilemap to position on the screen.
 func coordinates_to_position(coordinates):
 	return coordinates * tile_size + Vector2(tile_size / 2, tile_size / 2)

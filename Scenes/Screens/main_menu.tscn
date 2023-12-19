@@ -22,4 +22,9 @@ grow_vertical = 2
 size_flags_horizontal = 4
 text = "PLAY"
 
+[node name="pathfinding_label" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "0"
+
 [connection signal="pressed" from="CanvasLayer/Play" to="." method="_on_play_pressed"]

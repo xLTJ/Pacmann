@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 A_star_script="*res://Scripts/GlobalScripts/A_star_script.gd"
+global_variables="*res://Scripts/GlobalScripts/global_variables.gd"
 
 [display]
 
