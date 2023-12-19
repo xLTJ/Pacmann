@@ -68,7 +68,7 @@ func restart_player():
 	player = player_instance.instantiate()
 	player.ObstacleTileMap = obstacle_tileMap
 	
-	var player_coordinates = current_level_scene.entity_coordinates["player_spawn_coordinates"]
+	var player_coordinates = current_level_scene.entity_coordinates["player_spawn_coordinates"][0]
 	player.position = coordinates_to_position(player_coordinates)
 	
 	current_level_node.add_child(player)

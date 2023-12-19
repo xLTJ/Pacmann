@@ -42,9 +42,11 @@ func _ready():
 
 func _physics_process(delta):
 	grid_coordinates = get_coordinates()
+	
 	if !is_moving:
 		cow_path = get_enemy_path()
 		update_target_position(cow_path)
+		
 	move_to_cell(new_position, delta)
 
 

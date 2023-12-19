@@ -30,9 +30,11 @@ func _ready():
 func _physics_process(delta):
 	grid_coordinates = get_coordinates()
 	player_input()
+	
 	if !is_moving:
 		update_direction()
 		last_coordinates = grid_coordinates
+		
 	move_player(delta)
 
 
@@ -48,18 +50,6 @@ func player_input():
 	for key in input_directions.keys():
 		if Input.is_action_just_pressed(key):
 			movement_direction = input_directions[key]
-			
-
-
-# Moves the player
-func move_player(delta):
-	movement_progress += speed * delta
-	if movement_progress >= 1.0:
-		position = start_position + (tile_size * movement_vector)
-		movement_progress = 0.0
-		is_moving = false
-	else:
-		position = start_position + (movement_progress * movement_vector * tile_size)
 
 
 # Updates the players direction based on the players input, and makes sure that the direction first actually changes when the tile is available
@@ -89,6 +79,17 @@ func update_movement(new_vector, rotation, direction_id):
 		player_sprite.rotation_degrees = rotation
 
 
+# Moves the player
+func move_player(delta):
+	movement_progress += speed * delta
+	if movement_progress >= 1.0:
+		position = start_position + (tile_size * movement_vector)
+		movement_progress = 0.0
+		is_moving = false
+	else:
+		position = start_position + (movement_progress * movement_vector * tile_size)
+
+
 # Gets the grid coordinates of the player
 func get_coordinates():
 	var player_coordinates = (position / tile_size)
@@ -107,10 +108,12 @@ func collision():
 
 # Checks the collision in a specific direction
 func check_collision(direction, neighbor_type):
-	if movement_vector == direction:
-		var neighbor_cell = ObstacleTileMap.get_neighbor_cell(grid_coordinates, neighbor_type)
-		if ObstacleTileMap.get_cell_source_id(0, neighbor_cell) == 1:
-			movement_vector = Vector2.ZERO
+	if movement_vector != direction:
+		return
+	
+	var neighbor_cell = ObstacleTileMap.get_neighbor_cell(grid_coordinates, neighbor_type)
+	if ObstacleTileMap.get_cell_source_id(0, neighbor_cell) == 1:
+		movement_vector = Vector2.ZERO
 
 ##########################################
 # Items collection and hitting enemies

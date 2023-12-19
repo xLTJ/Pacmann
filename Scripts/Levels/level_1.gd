@@ -3,12 +3,20 @@ extends Node2D
 # @export var enemy_coordinates = [Vector2(6, 8), Vector2(7, 8)]
 # @export var player_spawn_coordinates = Vector2(7, 1)
 
+@onready var spawn_map = $SpawnMap
+@onready var onstacle_map = $ObstacleMap
+
 var entity_coordinates = {}
+var entities_by_id = {
+	'player_spawn_coordinates': 8,
+	'enemy_coordinates': 7,
+	'skibid_point_coordinates': 0,
+	'skibid_ball_coordinates': 1,
+	'speed_powerup_coordinates': 2
+}
 
 var tile_size = 32
 
-@onready var spawn_map = $SpawnMap
-@onready var onstacle_map = $ObstacleMap
 
 
 # Called when the node enters the scene tree for the first time.
@@ -23,11 +31,14 @@ func _process(delta):
 
 # Gets the spawn coordinates for all the different things that needs to be spawned. This information is gathered from the "spawn_map" tilemap.
 func get_spawn_coordinates():
-	entity_coordinates["player_spawn_coordinates"] = get_cells_by_id(8)[0]
-	entity_coordinates["enemy_coordinates"] = get_cells_by_id(7)
-	entity_coordinates["skibid_point_coordinates"] = get_cells_by_id(0)
-	entity_coordinates["skibid_ball_coordinates"] = get_cells_by_id(1)
-	entity_coordinates["speed_powerup_coordinates"] = get_cells_by_id(2)
+	for entity_type in entities_by_id.keys():
+		entity_coordinates[entity_type] = get_cells_by_id(entities_by_id[entity_type])
+	
+	#entity_coordinates['player_spawn_coordinates'] = get_cells_by_id(8)[0]
+	#entity_coordinates['enemy_coordinates'] = get_cells_by_id(7)
+	#entity_coordinates['skibid_point_coordinates'] = get_cells_by_id(0)
+	#entity_coordinates['skibid_ball_coordinates'] = get_cells_by_id(1)
+	#entity_coordinates['speed_powerup_coordinates'] = get_cells_by_id(2)
 
 
 # Gets all cells of a specific id in the "spawn_map" tilemap.
