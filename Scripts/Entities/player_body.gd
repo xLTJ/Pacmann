@@ -38,14 +38,17 @@ func _physics_process(delta):
 
 # handles player input
 func player_input():
-	if Input.is_action_just_pressed("ui_down"):
-		movement_direction = 'down'
-	elif Input.is_action_just_pressed("ui_up"):
-		movement_direction = 'up'
-	elif Input.is_action_just_pressed("ui_left"):
-		movement_direction = 'left'
-	elif Input.is_action_just_pressed("ui_right"):
-		movement_direction = 'right'
+	var input_directions = {
+		'ui_down': 'down',
+		'ui_up': 'up',
+		"ui_left": 'left',
+		'ui_right': 'right'
+	}
+	
+	for key in input_directions.keys():
+		if Input.is_action_just_pressed(key):
+			movement_direction = input_directions[key]
+			
 
 
 # Moves the player
