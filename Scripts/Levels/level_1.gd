@@ -7,6 +7,7 @@ extends Node2D
 @onready var onstacle_map = $ObstacleMap
 
 var entity_coordinates = {}
+
 var entities_by_id = {
 	'player_spawn_coordinates': 8,
 	'enemy_coordinates': 7,
@@ -33,12 +34,6 @@ func _process(delta):
 func get_spawn_coordinates():
 	for entity_type in entities_by_id.keys():
 		entity_coordinates[entity_type] = get_cells_by_id(entities_by_id[entity_type])
-	
-	#entity_coordinates['player_spawn_coordinates'] = get_cells_by_id(8)[0]
-	#entity_coordinates['enemy_coordinates'] = get_cells_by_id(7)
-	#entity_coordinates['skibid_point_coordinates'] = get_cells_by_id(0)
-	#entity_coordinates['skibid_ball_coordinates'] = get_cells_by_id(1)
-	#entity_coordinates['speed_powerup_coordinates'] = get_cells_by_id(2)
 
 
 # Gets all cells of a specific id in the "spawn_map" tilemap.

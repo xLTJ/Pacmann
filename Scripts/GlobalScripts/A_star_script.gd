@@ -42,7 +42,6 @@ class a_star_node:
 
 # Finds the h value for a cell based on its coordinates using Euclidean distance
 func get_h_value(cell_coords, destination_coords):
-	# return sqrt((cell_coords.x - destination_coords.x) ** 2 + (cell_coords.y - destination_coords.y) ** 2)
 	var dx = abs(cell_coords.x - destination_coords.x)
 	var dy = abs(cell_coords.y - destination_coords.y)
 	return dx + dy
@@ -173,10 +172,10 @@ func find_successor(x, y, node_info, open_list, parent_node, destination, grid_l
 		open_list.append([node_f, Vector2(x, y)])
 
 
+# Returns the path as an array
 func show_path(end_node, node_info, source):
 	var path = []
 	var node = end_node[1]
-	print(node)
 	path.insert(0, node)
 	while node != source:
 		var current_node_info = get_a_star_node(node_info, node)
@@ -189,5 +188,4 @@ func show_path(end_node, node_info, source):
 	if path == []:
 		pass
 	
-	# print("final path is " + str(path))
 	return path
